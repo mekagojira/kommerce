@@ -2,7 +2,7 @@ package createcategory
 
 import (
 	"komo/app/product/common/err"
-	"komo/app/product/service"
+	categoryService "komo/app/product/service/category"
 	"strings"
 )
 
@@ -10,7 +10,7 @@ func Handle(ctx Ctx) Response {
 	ctx.Req.Slug = strings.ToLower(ctx.Req.Slug)
 
 	{
-		res := service.CategorySlugExists(ctx.Req.Slug)
+		res := categoryService.CategorySlugExists(ctx.Req.Slug)
 		if res.Error != nil {
 			return ctx.ServerError()
 		}
@@ -20,7 +20,7 @@ func Handle(ctx Ctx) Response {
 	}
 
 	{
-		res := service.CreateCategory(service.CreateCategoryInput{
+		res := categoryService.CreateCategory(categoryService.CreateCategoryInput{
 			Slug:         ctx.Req.Slug,
 			CategoryName: ctx.Req.CategoryName,
 		})

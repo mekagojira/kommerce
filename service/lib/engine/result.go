@@ -1,5 +1,7 @@
 package engine
 
+import "fmt"
+
 type Result[T any] struct {
 	Data    *T
 	Error   error
@@ -26,6 +28,10 @@ func (r *Result[T]) WithPureData(data T) *Result[T] {
 
 func (r *Result[T]) PureData() T {
 	return *r.Data
+}
+
+func (r *Result[T]) WithErrorString(err string) *Result[T] {
+	return r.WithError(fmt.Errorf(err))
 }
 
 func (r *Result[T]) WithError(err error) *Result[T] {

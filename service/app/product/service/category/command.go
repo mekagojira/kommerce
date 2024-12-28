@@ -1,7 +1,8 @@
-package service
+package category
 
 import (
-	"komo/app/product/repo/pg"
+	constant "komo/app/product/common/constant"
+	repo "komo/app/product/repo/pg/category"
 	"komo/lib/engine"
 	"time"
 )
@@ -12,14 +13,10 @@ type CreateCategoryInput struct {
 }
 
 func CreateCategory(input CreateCategoryInput) *engine.Result[bool] {
-	return pg.CreateCategory(pg.CategoryData{
+	return repo.CreateCategory(repo.CategoryData{
 		Slug:         input.Slug,
 		CategoryName: input.CategoryName,
 		CreatedAt:    time.Now(),
-		State:        pg.CATEGORY_STATE_INACTIVE,
+		State:        constant.CATEGORY_STATE_INACTIVE,
 	})
-}
-
-func CategorySlugExists(slug string) *engine.Result[bool] {
-	return pg.CategorySlugExists(slug)
 }
