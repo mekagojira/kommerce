@@ -1,10 +1,9 @@
 package controller
 
 import (
-	"komo/app/auth/feature/ping"
-	"komo/lib/engine"
+	"komo/lib/service/ping"
 )
 
 func init() {
-	engine.RegisterEndpoint("/ping", ping.Handle)
+	ping.Ping()
 }
