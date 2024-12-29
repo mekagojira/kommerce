@@ -31,6 +31,15 @@ func StructToJsonBytes[T any](data T) *Result[[]byte] {
 	return res
 }
 
+func SetStructToJsonBytes[T any](data T, output *[]byte) *Result[[]byte] {
+	if res := StructToJsonBytes(data); !res.IsOk() {
+		return res
+	} else {
+		*output = res.PureData()
+		return res
+	}
+}
+
 func JsonBytesToStruct[T any](data []byte) *Result[T] {
 	res := NewResult[T]()
 
@@ -42,4 +51,13 @@ func JsonBytesToStruct[T any](data []byte) *Result[T] {
 
 	res.WithPureData(result)
 	return res
+}
+
+func SetJsonBytesToStruct[T any](data []byte, output *T) *Result[T] {
+	if res := JsonBytesToStruct[T](data); !res.IsOk() {
+		return res
+	} else {
+		*output = res.PureData()
+		return res
+	}
 }

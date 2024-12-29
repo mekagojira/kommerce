@@ -18,6 +18,8 @@ type Postgres struct {
 	Logger *zap.Logger
 }
 
+var Logger *zap.Logger
+
 func (p *Postgres) QueryRowBg(sql string, arguments ...any) *engine.Result[pgx.Row] {
 	res := engine.NewResult[pgx.Row]()
 	row := p.Conn.QueryRow(context.Background(), sql, arguments...)
@@ -83,6 +85,8 @@ func NewPg(uri string) {
 		),
 	}
 
+	Logger = Db.Logger
+
 	Db.Connect()
 	if err := Db.Ping(); !err.IsOk() {
 		engine.Logger.Fatal(err.Error.Error())
@@ -90,7 +94,7 @@ func NewPg(uri string) {
 }
 
 func (p *Postgres) Ping() *engine.Result[bool] {
-	result := engine.NewResult[bool]()
+	result := engine.NewResult(true)
 
 	if err := p.Conn.Ping(context.Background()); err != nil {
 		p.Logger.Error(err.Error())

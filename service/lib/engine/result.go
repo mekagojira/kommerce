@@ -8,8 +8,14 @@ type Result[T any] struct {
 	Handled bool
 }
 
-func NewResult[T any]() *Result[T] {
-	return &Result[T]{}
+func NewResult[T any](defaultData ...T) *Result[T] {
+	res := &Result[T]{}
+
+	if len(defaultData) > 0 {
+		res.Data = &defaultData[0]
+	}
+
+	return res
 }
 
 func (r *Result[T]) IsOk() bool {

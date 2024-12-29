@@ -6,30 +6,10 @@ import (
 	"komo/app/product/repo/pg"
 	"komo/lib/db"
 	"komo/lib/engine"
-	"time"
 )
-
-const (
-	CATEGORY_TABLE = "komo_category"
-)
-
-type CategoryRow struct {
-	Slug         string    `db:"slug"`
-	CategoryName string    `db:"category_name"`
-	State        string    `db:"state"`
-	CreatedAt    time.Time `db:"created_at"`
-	Data         []byte    `db:"data"`
-}
-
-type CategoryData struct {
-	Slug         string    `json:"slug"`
-	CategoryName string    `json:"categoryName"`
-	State        string    `json:"state"`
-	CreatedAt    time.Time `json:"createdAt"`
-}
 
 func CategorySlugExists(slug string) *engine.Result[bool] {
-	res := engine.NewResult[bool]()
+	res := engine.NewResult(true)
 
 	rows := db.Db.QueryRowBg(`
 		SELECT count(slug) as s FROM `+CATEGORY_TABLE+` WHERE slug = $1`, slug)
@@ -48,7 +28,7 @@ func CategorySlugExists(slug string) *engine.Result[bool] {
 }
 
 func CreateCategory(data CategoryData) *engine.Result[bool] {
-	res := engine.NewResult[bool]()
+	res := engine.NewResult(true)
 
 	jsonData := engine.StructToJsonBytes(data)
 	if jsonData.Error != nil {
@@ -76,7 +56,7 @@ type ListCategoriesInput struct {
 }
 
 func ListCategories(input ListCategoriesInput, paging pg.Paging) *engine.Result[[]CategoryData] {
-	res := engine.NewResult[[]CategoryData]()
+	res := engine.NewResult([]CategoryData{})
 
 	query := map[string]string{}
 	params := map[string]any{}
