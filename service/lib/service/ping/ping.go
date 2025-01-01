@@ -1,9 +1,11 @@
 package ping
 
 import (
+	"context"
 	"fmt"
 	"komo/lib/db"
 	"komo/lib/engine"
+	"komo/lib/streaming"
 	"net/http"
 )
 
@@ -23,11 +25,28 @@ func Ping() {
 			res.WithError(fmt.Errorf("DB error"))
 		}
 
-		if res.IsOk() {
-			w.Write([]byte("pong"))
+		if !res.IsOk() {
+			sendError(w, r)
+			engine.Logger.Error(res.Error.Error())
 			return
 		}
 
-		w.WriteHeader(http.StatusInternalServerError)
+		err := streaming.Kafka.Ping(context.Background())
+		if err != nil {
+			engine.Logger.Error(err.Error())
+			res.WithError(err)
+			sendError(w, r)
+			return
+		}
+
+		sendOk(w, r)
 	})
+}
+
+func sendOk(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("pong"))
+}
+
+func sendError(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusInternalServerError)
 }
