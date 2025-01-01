@@ -8,10 +8,9 @@ import (
 )
 
 func main() {
-	db.NewPg(engine.GetEnv("DATABASE_URI", engine.GetEnv("AUTH_DATABASE_URI")))
+	streaming.Connect(streaming.KafkaConfig{ConsumerGroup: engine.GetEnv("AUTH_CONSUMER_GROUP", "CONSUMER_GROUP")})
 
-	streaming.Connect()
+	db.NewPg(engine.GetEnv("DATABASE_URI", "AUTH_DATABASE_URI"))
 
-	engine.StartServer(engine.GetEnv("AUTH_PORT", "8080"))
-
+	engine.StartServer(engine.GetEnv("AUTH_PORT", "PORT", "9000"))
 }

@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	streaming.Connect(streaming.KafkaConfig{ConsumerGroup: engine.GetEnv("KAFKA_CONSUMER_GROUP", "CONSUMER_GROUP")})
+	streaming.Connect(streaming.KafkaConfig{ConsumerGroup: engine.GetEnv("PRODUCT_CONSUMER_GROUP", "CONSUMER_GROUP")})
 
 	db.NewPg(engine.GetEnv("DATABASE_URI", "PRODUCT_DATABASE_URI"))
 
