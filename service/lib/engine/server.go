@@ -2,7 +2,6 @@ package engine
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"time"
 
@@ -167,7 +166,7 @@ func RegisterEndpoint[I any, O any](url string, handler func(*Ctx[I, O]) *Respon
 }
 
 func StartServer(port string) {
-	log.Println("Starting server on port " + port)
+	Logger.Info("Starting server on port " + port)
 
 	http.ListenAndServe(":"+port, Server)
 }

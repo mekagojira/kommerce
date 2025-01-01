@@ -5,17 +5,19 @@ import (
 	"os"
 )
 
-func GetEnv(key string, defaultVal ...string) string {
-	value := os.Getenv(key)
-
-	if len(value) == 0 {
-		if len(defaultVal) == 0 {
-			return ""
+func GetEnv(keys ...string) string {
+	for _, val := range keys {
+		currentValue := os.Getenv(val)
+		if currentValue != "" {
+			return currentValue
 		}
-		return defaultVal[0]
 	}
 
-	return value
+	if len(keys) > 0 {
+		return keys[len(keys)-1]
+	}
+
+	return ""
 }
 
 func StructToJsonBytes[T any](data T) *Result[[]byte] {

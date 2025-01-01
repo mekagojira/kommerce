@@ -9,9 +9,9 @@ import (
 )
 
 func main() {
-	streaming.Connect()
+	streaming.Connect(streaming.KafkaConfig{ConsumerGroup: engine.GetEnv("KAFKA_CONSUMER_GROUP", "CONSUMER_GROUP")})
 
-	db.NewPg(engine.GetEnv("DATABASE_URI", engine.GetEnv("PRODUCT_DATABASE_URI")))
+	db.NewPg(engine.GetEnv("DATABASE_URI", "PRODUCT_DATABASE_URI"))
 
-	engine.StartServer(engine.GetEnv("PRODUCT_PORT", "8080"))
+	engine.StartServer(engine.GetEnv("PRODUCT_PORT", "PORT", "9000"))
 }

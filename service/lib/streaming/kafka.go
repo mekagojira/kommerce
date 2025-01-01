@@ -12,13 +12,17 @@ import (
 
 var Kafka *kgo.Client
 
-func Connect() {
+type KafkaConfig struct {
+	ConsumerGroup string
+}
+
+func Connect(config KafkaConfig) {
 	brokers := engine.GetEnv("KAFKA_BROKER_URI", "localhost:9092")
 	seeds := strings.Split(brokers, ",")
 
 	client, err := kgo.NewClient(
 		kgo.SeedBrokers(seeds...),
-		kgo.ConsumerGroup("komo_product"),
+		kgo.ConsumerGroup(config.ConsumerGroup),
 	)
 
 	if err != nil {
