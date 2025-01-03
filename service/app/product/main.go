@@ -5,13 +5,14 @@ import (
 	"komo/lib/engine"
 	"komo/lib/streaming"
 
+	"komo/app/product/common/constant"
 	_ "komo/app/product/controller"
 )
 
 func main() {
-	streaming.Connect(streaming.KafkaConfig{ConsumerGroup: engine.GetEnv("PRODUCT_CONSUMER_GROUP", "CONSUMER_GROUP")})
+	streaming.Connect(constant.GetKafkaEnv())
 
-	db.NewPg(engine.GetEnv("DATABASE_URI", "PRODUCT_DATABASE_URI"))
+	db.NewPg(constant.GetPgEnv())
 
-	engine.StartServer(engine.GetEnv("PRODUCT_PORT", "PORT", "9000"))
+	engine.StartServer(constant.GetPortEnv())
 }
