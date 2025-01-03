@@ -121,11 +121,11 @@ func RegisterEndpoint[I any, O any](url string, handler func(*Ctx[I, O]) *Respon
 			w:   w,
 		}
 
-		if err := GetUid(); err.Error != nil {
+		if res := GetUid(); IsError(res) {
 			ctx.SendResponse(ctx.ServerError())
 			return
 		} else {
-			ctx.Id = *err.Data
+			ctx.Id = *res.Data
 			ctx.Logger = Logger.With(zap.String("id", ctx.Id))
 		}
 
@@ -154,11 +154,11 @@ func RegisterEndpoint[I any, O any](url string, handler func(*Ctx[I, O]) *Respon
 
 		ctx.Logger.Info(url)
 
-		if result := ctx.ParseRequest(); !result.IsOk() {
+		if res := ctx.ParseRequest(); IsError(res) {
 			ctx.SendResponse(ctx.BadRequest())
 			return
 		} else {
-			ctx.Req = result.Data
+			ctx.Req = res.Data
 		}
 
 		ctx.SendResponse(handler(ctx))

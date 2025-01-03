@@ -8,6 +8,14 @@ type Result[T any] struct {
 	Handled bool
 }
 
+func IsError[T any](res *Result[T]) bool {
+	if res == nil {
+		return true
+	}
+
+	return !res.IsOk()
+}
+
 func NewResult[T any](defaultData ...T) *Result[T] {
 	res := &Result[T]{}
 
